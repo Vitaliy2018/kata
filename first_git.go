@@ -1,8 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"strconv"
+	"os"
 )
 
 const (
@@ -10,26 +11,28 @@ const (
 	biggir = "Входные данные слишком большие"
 )
 
+var (
+	Arab      = [11]string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
+	operation = [4]string{"+", "-", "/", "*"}
+	Rim       = [82]string{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
+		"X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX",
+		"XX", "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX",
+		"XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX",
+		"XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX",
+		"L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX",
+		"LX", "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX",
+		"LXX", "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX",
+		"LXXX", "LXXXI"}
+)
+
 func main() {
-	var (
-		first_number_str, second_number_str string
-		chek                                int
-	)
-	fmt.Scan(&first_number_str, &second_number_str)
-	for i := 0; i <= 10; i++ {
-		if first_number_str == strconv.Itoa(i) || second_number_str == strconv.Itoa(i) {
-			if first_number_str == second_number_str {
-				chek = 2
-			} else {
-				chek++
-			}
-		}
+	for i := 0; i < len(Rim); i++ {
+		fmt.Println(i, " ", Rim[i])
 	}
-	if chek == 2 {
-		fmt.Print("good")
-	} else {
-		fmt.Print("bad")
-	}
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	str := scanner.Text()
+	fmt.Print(str)
 }
 
 func sum(first_number int, second_number int) int { // Функиця суммы
