@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 const (
@@ -26,13 +27,26 @@ var (
 )
 
 func main() {
-	for i := 0; i < len(Rim); i++ {
-		fmt.Println(i, " ", Rim[i])
-	}
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	str := scanner.Text()
-	fmt.Print(str)
+	first_sumbol := string(str[0])
+	//oper := string(str[1])
+	second_sumbol := string(str[2])
+	for i := 0; i < len(Arab); i++ {
+		iStr := strconv.Itoa(i)
+		if first_sumbol == iStr {
+			for j := 0; j < len(Arab); j++ {
+				jStr := strconv.Itoa(j)
+				if second_sumbol == jStr {
+					for k := 0; k < len(operation); k++ {
+						//kStr := strconv.Itoa(k)
+						fmt.Print(operation[k])
+					}
+				}
+			}
+		}
+	}
 }
 
 func sum(first_number int, second_number int) int { // Функиця суммы
