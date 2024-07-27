@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	sort   = "Цифры не одной системы"
-	biggir = "Входные данные слишком большие"
+	sort    = "Выдача паники, так как используются одновременно разные системы счисления."
+	biggir  = "Выдача паники, так как формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *)."
+	rim_otr = "Выдача паники, так как в римской системе нет отрицательных чисел."
 )
 
 var (
@@ -29,58 +30,77 @@ var (
 )
 
 func main() {
+	error := 0
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	str := scanner.Text()
 	words := strings.Split(str, " ")
-	first_sumbol := string(words[0])
-	oper := string(words[1])
-	second_sumbol := string(words[2])
-	for i := 0; i < len(Arab); i++ {
-		iStr := strconv.Itoa(i)
-		if first_sumbol == iStr {
-			for j := 0; j < len(Arab); j++ {
-				jStr := strconv.Itoa(j)
-				if second_sumbol == jStr {
-					fmt.Print("YES")
-					for k := 0; k < len(operation); k++ {
-						if oper == operation[k] {
-							switch k {
-							case 0:
-								fmt.Print(sum(i, j))
-							case 1:
-								fmt.Print(sub(i, j))
-							case 2:
-								fmt.Print(div(i, j))
-							case 3:
-								fmt.Print(mult(i, j))
+	if len(words) != 3 {
+		fmt.Print(biggir)
+	} else {
+		first_sumbol := string(words[0])
+		oper := string(words[1])
+		second_sumbol := string(words[2])
+		for i := 0; i < len(Arab); i++ {
+			iStr := strconv.Itoa(i)
+			if first_sumbol == iStr {
+				error++
+				for j := 0; j < len(Arab); j++ {
+					jStr := strconv.Itoa(j)
+					if second_sumbol == jStr {
+						error++
+						for k := 0; k < len(operation); k++ {
+							if oper == operation[k] {
+								switch k {
+								case 0:
+									fmt.Print(sum(i, j))
+								case 1:
+									fmt.Print(sub(i, j))
+								case 2:
+									fmt.Print(div(i, j))
+								case 3:
+									fmt.Print(mult(i, j))
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}
-	for i := 0; i < 11; i++ {
-		if first_sumbol == Rim[i] {
-			for j := 0; j < 11; j++ {
-				if second_sumbol == Rim[j] {
-					for k := 0; k < len(operation); k++ {
-						if oper == operation[k] {
-							switch k {
-							case 0:
-								fmt.Print(Rim[sum(i, j)])
-							case 1:
-								fmt.Print(Rim[sub(i, j)])
-							case 2:
-								fmt.Print(Rim[div(i, j)])
-							case 3:
-								fmt.Print(Rim[mult(i, j)])
+		if error == 1 {
+			fmt.Print(sort)
+		}
+		error = 0
+		for i := 0; i < 11; i++ {
+			if first_sumbol == Rim[i] {
+				error++
+				for j := 0; j < 11; j++ {
+					if second_sumbol == Rim[j] {
+						error++
+						for k := 0; k < len(operation); k++ {
+							if oper == operation[k] {
+								switch k {
+								case 0:
+									fmt.Print(Rim[sum(i, j)])
+								case 1:
+									if i-j >= 0 {
+										fmt.Print(Rim[sub(i, j)])
+									} else {
+										fmt.Print(rim_otr)
+									}
+								case 2:
+									fmt.Print(Rim[div(i, j)])
+								case 3:
+									fmt.Print(Rim[mult(i, j)])
+								}
 							}
 						}
 					}
 				}
 			}
+		}
+		if error == 1 {
+			fmt.Print(sort)
 		}
 	}
 }
