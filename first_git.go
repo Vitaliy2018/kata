@@ -67,8 +67,8 @@ func main() {
 				}
 			}
 		}
-		if error == 1 {
-			fmt.Print(sort)
+		if error == 1 && first_sumbol != "0" && second_sumbol != "0" {
+			fmt.Println(sort)
 		}
 		error = 0
 		for i := 0; i < 11; i++ {
@@ -99,7 +99,7 @@ func main() {
 				}
 			}
 		}
-		if error == 1 {
+		if error == 1 && first_sumbol != "0" && second_sumbol != "0" {
 			fmt.Print(sort)
 		}
 	}
