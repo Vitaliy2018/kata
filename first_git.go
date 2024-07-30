@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	sort    = "Выдача паники, так как используются одновременно разные системы счисления."
-	biggir  = "Выдача паники, так как формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *)."
-	rim_otr = "Выдача паники, так как в римской системе нет отрицательных чисел."
+	sort     = "Выдача паники, так как используются одновременно разные системы счисления."
+	error_op = "Выдача паники, так как формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *)."
+	rim_otr  = "Выдача паники, так как в римской системе нет отрицательных чисел."
+	dan      = "Выдача паники, так как не правильные данные"
 )
 
 var (
@@ -30,13 +31,21 @@ var (
 )
 
 func main() {
-	error := 0
+	first_number := 111
+	oper_int := 5
+	second_number := 111
+	rim_count := 0
+	first_rim_number := 0
+	second_rim_number := 0
+	second_arab_number := 0
+	first_arab_number := 0
+	arab_count := 0
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	str := scanner.Text()
 	words := strings.Split(str, " ")
 	if len(words) != 3 {
-		fmt.Print(biggir)
+		fmt.Print(error_op)
 	} else {
 		first_sumbol := string(words[0])
 		oper := string(words[1])
@@ -44,64 +53,77 @@ func main() {
 		for i := 0; i < len(Arab); i++ {
 			iStr := strconv.Itoa(i)
 			if first_sumbol == iStr {
-				error++
-				for j := 0; j < len(Arab); j++ {
-					jStr := strconv.Itoa(j)
-					if second_sumbol == jStr {
-						error++
-						for k := 0; k < len(operation); k++ {
-							if oper == operation[k] {
-								switch k {
-								case 0:
-									fmt.Print(sum(i, j))
-								case 1:
-									fmt.Print(sub(i, j))
-								case 2:
-									fmt.Print(div(i, j))
-								case 3:
-									fmt.Print(mult(i, j))
-								}
-							}
-						}
-					}
-				}
+				arab_count++
+				first_arab_number = i
 			}
 		}
-		if error == 1 && first_sumbol != "0" && second_sumbol != "0" {
-			fmt.Println(sort)
+		for i := 0; i < len(Arab); i++ {
+			iStr := strconv.Itoa(i)
+			if second_sumbol == iStr {
+				arab_count++
+				second_arab_number = i
+			}
 		}
-		error = 0
 		for i := 0; i < 11; i++ {
 			if first_sumbol == Rim[i] {
-				error++
-				for j := 0; j < 11; j++ {
-					if second_sumbol == Rim[j] {
-						error++
-						for k := 0; k < len(operation); k++ {
-							if oper == operation[k] {
-								switch k {
-								case 0:
-									fmt.Print(Rim[sum(i, j)])
-								case 1:
-									if i-j >= 0 {
-										fmt.Print(Rim[sub(i, j)])
-									} else {
-										fmt.Print(rim_otr)
-									}
-								case 2:
-									fmt.Print(Rim[div(i, j)])
-								case 3:
-									fmt.Print(Rim[mult(i, j)])
-								}
-							}
-						}
-					}
-				}
+				first_rim_number = i
+				rim_count++
 			}
 		}
-		if error == 1 && first_sumbol != "0" && second_sumbol != "0" {
-			fmt.Print(sort)
+		for i := 0; i < 11; i++ {
+			if second_sumbol == Rim[i] {
+				second_rim_number = i
+				rim_count++
+			}
 		}
+		for i := 0; i < len(operation); i++ {
+			if operation[i] == oper {
+				oper_int = i
+			}
+		}
+		if oper_int == 5 {
+			fmt.Print(error_op)
+		}
+	}
+	if rim_count == 2 || arab_count == 2 {
+		if rim_count == 2 {
+			first_number = first_rim_number
+			second_number = second_rim_number
+			switch oper_int {
+			case 0:
+				fmt.Print(Rim[sum(first_number, second_number)])
+			case 1:
+				if sub(first_number, second_number) < 0 {
+					fmt.Print(rim_otr)
+				} else {
+					fmt.Print(Rim[sub(first_number, second_number)])
+				}
+			case 2:
+				fmt.Print(Rim[div(first_number, second_number)])
+			case 3:
+				fmt.Print(Rim[mult(first_number, second_number)])
+			}
+		} else {
+			first_number = first_arab_number
+			second_number = second_arab_number
+			switch oper_int {
+			case 0:
+				fmt.Print(sum(first_number, second_number))
+			case 1:
+				fmt.Print(sub(first_number, second_number))
+			case 2:
+				fmt.Print(div(first_number, second_number))
+			case 3:
+				fmt.Print(mult(first_number, second_number))
+			}
+		}
+	}
+	if arab_count == 1 && rim_count == 1 {
+		fmt.Print(sort)
+	}
+	if first_number >= 0 && first_number <= 10 && second_number >= 0 && second_number <= 10 {
+	} else {
+		fmt.Print(dan)
 	}
 }
 
