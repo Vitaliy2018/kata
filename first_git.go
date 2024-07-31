@@ -93,16 +93,21 @@ func main() {
 			case 0:
 				fmt.Print(Rim[sum(first_number, second_number)])
 			case 1:
-				if sub(first_number, second_number) < 0 {
+				if sub(first_number, second_number) <= 0 {
 					fmt.Print(rim_otr)
 				} else {
 					fmt.Print(Rim[sub(first_number, second_number)])
 				}
 			case 2:
-				fmt.Print(Rim[div(first_number, second_number)])
+				if div(first_number, second_number) <= 0 {
+					fmt.Print(rim_otr)
+				} else {
+					fmt.Print(Rim[div(first_number, second_number)])
+				}
 			case 3:
 				fmt.Print(Rim[mult(first_number, second_number)])
 			}
+
 		} else {
 			first_number = first_arab_number
 			second_number = second_arab_number
